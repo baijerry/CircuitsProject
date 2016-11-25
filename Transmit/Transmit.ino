@@ -55,7 +55,12 @@ void loop() {
 
                 char buf[50];
                 url.toCharArray(buf, 50); 
-                serial_URL.write(buf);
+                
+                for (int i = 0; i < 10; i++){ //sends url 10 times, once a second
+                    serial_URL.write(buf); 
+                    delay(1000);
+                }
+               
             } else if  (input.equals("ab")){
                 //ping slave to run B
                 serial_MasterSlave.write('b');
