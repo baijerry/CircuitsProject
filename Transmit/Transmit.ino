@@ -11,8 +11,8 @@ SoftwareSerial serial_URL (pin_null, pin_URL); //Rx, Tx (RX not used)
 
 //defs
 enum MODE {MASTER, SLAVE} mode;
-int channel1 = 5475; //Hz
-int channel2 = 600; //Hz
+int channel1 = 5425; //Hz
+int channel2 = 420; //Hz
 
 //function declares
 void sendWaveA(int freq);
@@ -20,7 +20,7 @@ void sendWaveB(int freq);
 
 void setup() {
   Serial.begin(4800); //local
-  serial_URL.begin(4800); //for URL transmission
+  serial_URL.begin(9600); //for URL transmission
   serial_MasterSlave.begin(11920); //to ping slave (needs to be fast)
 
   mode = SLAVE; //default
@@ -56,11 +56,11 @@ void loop() {
                 char buf[50];
                 url.toCharArray(buf, 50); 
                 
-                for (int i = 0; i < 10; i++){ //sends url 10 times, once a second
+                for (int i = 0; i < 60; i++){ //sends url 10 times, once a second
                     serial_URL.write(buf); 
                     delay(1000);
                 }
-               
+                
             } else if  (input.equals("ab")){
                 //ping slave to run B
                 serial_MasterSlave.write('b');
@@ -84,7 +84,7 @@ void loop() {
       
             //read letter
             char letter = serial_MasterSlave.read();
-            Serial.print("Received letter");
+            Serial.print("Received letter ");
             Serial.println(letter);
       
             //send on channel2
@@ -102,8 +102,8 @@ void sendWaveA(int freq) {
     Serial.print("Sending wave A at ");
     Serial.print(freq);
     Serial.println(" Hz");
-
-    tone(pin_waveAB, freq); //todo make it into pattern A
+    
+    tone(pin_waveAB, freq, 2000); //todo make it into pattern A
 }
 
 void sendWaveB(int freq){
@@ -111,7 +111,7 @@ void sendWaveB(int freq){
     Serial.print(freq);
     Serial.println(" Hz");
 
-    tone(pin_waveAB, freq); //todo make it into pattern B
+    tone(pin_waveAB, freq, 1000); //todo make it into pattern B
 }
             
             
