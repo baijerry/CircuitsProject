@@ -23,6 +23,8 @@ void setup() {
   serial_URL.begin(9600); //for URL transmission
   serial_MasterSlave.begin(11920); //to ping slave (needs to be fast)
 
+  pinMode(pin_waveAB, OUTPUT);
+  
   mode = SLAVE; //default
   Serial.println("Mode: Slave");
 }
@@ -103,7 +105,7 @@ void sendWaveA(int freq) {
     Serial.print(freq);
     Serial.println(" Hz");
     
-    tone(pin_waveAB, freq, 2000); //todo make it into pattern A
+    tone(pin_waveAB, freq, 5000); //todo make it into pattern A
 }
 
 void sendWaveB(int freq){
