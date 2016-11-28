@@ -13,6 +13,7 @@ unsigned int Ch1LastTrig;
 unsigned int Ch2LastTrig;
 unsigned int Ch1FinishTime;
 unsigned int Ch2FinishTime;
+unsigned int now;
 bool readflag = false;
 bool Ch1FinishedFlag = true;
 bool Ch2FinishedFlag = true;
@@ -20,7 +21,7 @@ bool Ch2FinishedFlag = true;
 //trigger analog reading
 int trigV = 900; 
 //trigger time length since last trigger reading
-int trigTime = 527434; //us, determined experimentally (3*avgsteplengthof420hz)
+int trigTime = 500; //ms
 
 //func declares
 
@@ -64,49 +65,51 @@ void loop() {
 
     //CHANNEL mode
     if (mode == CHANNEL) {
-       analog1 = analogRead(pin_channel1);
-       analog2 = analogRead(pin_channel2);
+       unsigned int analog1 = analogRead(pin_channel1);
+       unsigned int analog2 = analogRead(pin_channel2);
 
         if (analog1 > trigV && analog2 > trigV){ //find when signal starts sending
+          Serial.println("Receiving Signals");
           readflag = true;
           unsigned int read1 = 0;
           unsigned int read2 = 0;
-          Ch1LastTrig = micros();
-          Ch2LastTrig = micros();
+          Ch1LastTrig = millis();
+          Ch2LastTrig = millis();
           while (readflag) {
             read1 = analogRead(1);
             read2 = analogRead(2);
 
-            Serial.print(analog1);
-            Serial.print("\t");
-            Serial.print(analog2);
-            Serial.println();
+           // Serial.print(analog1);
+           // Serial.print("\t");
+           // Serial.print(analog2);
+           // Serial.println();
 
             if (read1 > trigV){
-              Ch1LastTrig = micros();
-              Serial.println("ch1 trig");
+              Ch1LastTrig = millis();
+              //Serial.println("ch1 trig");
             }
             
             if (read2 > trigV){
-              Ch2LastTrig = micros();
-              Serial.println("ch1 trig");
+              Ch2LastTrig = millis();
+              //Serial.println("ch1 trig");
             }
-            
-            Serial.print(">>>>");
-             Serial.println(micros() - Ch1LastTrig);
-             
-            if (micros() - Ch1LastTrig > trigTime) {
+             // Serial.println("millis() - Ch1LastTrig");
+             //Serial.println(millis() - Ch1LastTrig);
+            now = millis();
+            if (now - Ch1LastTrig > trigTime) {
               //channel 1 finished
               Ch1FinishedFlag = true;
-              Ch1FinishTime = micros();
-              Serial.println("Ch1 done");
+              Ch1FinishTime = millis();
+              //Serial.println("Ch1 done");
             }
-
-            if (micros() - Ch2LastTrig > trigTime) {
+              //Serial.println("millis() - Ch2LastTrig");
+             //Serial.println(millis() - Ch2LastTrig);
+            now = millis();
+            if (now - Ch2LastTrig > trigTime) {
               //channel 2 finished
               Ch2FinishedFlag = true;
-              Ch2FinishTime = micros();
-              Serial.println("Ch2 done");
+              Ch2FinishTime = millis();
+              //Serial.println("Ch2 done");
             }
             
             //exit loop
@@ -116,24 +119,27 @@ void loop() {
               Ch2FinishedFlag = false; 
             }
           }
-/*
+          
           //process shit 
           if (Ch2FinishTime > Ch1FinishTime) {
             //Ch1 finished first
             Serial.println("Channel_1/Master: B");
             Serial.println("Channel_2/Slave: A");
+            Serial.println();
           }
           else if (Ch2FinishTime < Ch1FinishTime) {
             //Ch2 finished first
             Serial.println("Channel_1/Master: A");
             Serial.println("Channel_2/Slave: B");
+            Serial.println();
           }
           else 
           {
-            Serial.println("Error");  
+            Serial.println("Error");
+            Serial.println();  
           }
-    */
-        delay(3000);
+          
+        //delay(3000);
         }
 
     }
