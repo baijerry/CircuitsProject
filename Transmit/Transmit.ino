@@ -23,6 +23,8 @@ void setup() {
   serial_URL.begin(9600); //for URL transmission
   serial_MasterSlave.begin(11920); //to ping slave (needs to be fast)
 
+  pinMode(pin_waveAB, OUTPUT);
+  
   mode = SLAVE; //default
   Serial.println("Mode: Slave");
 }

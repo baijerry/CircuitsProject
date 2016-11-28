@@ -9,17 +9,13 @@ SoftwareSerial serial_URL (pin_URL, pin_null); //Rx, Tx (TX not used)
 
 //defs
 enum MODE {URL, CHANNEL} mode;
-bool count_ch1 = false;
-bool count_ch2 = false;
-bool printflag = false;
-int trig_v = 900;
 
-int start_time = 0;
-int ch1_lastTrig = 0;
-int ch2_lastTrig = 0;
-int ch1_length = 0;
-int ch2_length = 0;
+unsigned int analog1;
+unsigned int analog2;
+bool readflag = false;
 
+int trigV = 900; //trigger analog reading
+int trigTime = 500; //trigger time length since last trigger reading
 
 //func declares
 
@@ -60,50 +56,48 @@ void loop() {
             Serial.write(serial_URL.read());
         }
     }
-    
+
     //CHANNEL mode
     if (mode == CHANNEL) {
-        if (!count_ch1 && !count_ch2 && analogRead(pin_channel1) < trig_v && analogRead(pin_channel2) < trig_v) {
-          //start count
-          Serial.println(analogRead(pin_channel1));
-          start_time = micros();
-          count_ch1= true;
-          count_ch2 = true;
-          printflag = true;
-        }
+       analog1 = analogRead(1);
+       analog2 = analogRead(2);
 
-        if (count_ch1 && analogRead(pin_channel1) > trig_v ) { //no signal
-          ch1_lastTrig = micros();
-        }
+        if (analog1 > trig && analog2 > trigV){ //find when signal starts sending
+          readflag = true;
+          unsigned int read1 = 0;
+          unsigned int read2 = 0;
+          while (readflag) {
+            read1 = analogRead(1);
+            read2 = analogRead(2);
 
-        if (count_ch2 && analogRead(pin_channel2) > trig_v ) { //no signal
-          ch2_lastTrig = micros();
-        }
+            Serial.print(analog1);
+            Serial.print("\t");
+            Serial.print(analog2);
+            Serial.println();
 
-        if (count_ch1 && (micros() - ch1_lastTrig) > 1000 ) { //last time triggered was more than 1000 microseconds
-          ch1_length = start_time - ch1_lastTrig;
-          count_ch1 = false;
-        }
+            if (read1 > trigV)
+              Ch1LastTrig = millis();
 
-        if (count_ch2 && (micros() - ch2_lastTrig) > 1000 ) { //last time triggered was more than 1000 microseconds
-          ch2_length = start_time - ch2_lastTrig;
-          count_ch2 = false;
-        }
+            if (read2 > trigV)
+              Ch2LastTrig = millis();
 
-        if (printflag && !count_ch1 && !count_ch2) { //both signals done sending
-          if (ch1_length > ch2_length) {
-            Serial.println("Channel 1 received A.");
-            Serial.println("Channel 2 received B.");
-            Serial.println("");
+            if (millis() - Ch1LastTrig > ) {
+              
+            }
+
+            if (millis() - Ch2LastTrig > ) {
+            
+            
+            }
+            
+            //something something 
+            readflag = false;
           }
-          else 
-          {
-            Serial.println("Channel 1 received B.");
-            Serial.println("Channel 2 received A.");
-            Serial.println("");
-          }
-          printflag = false;
+
+          //process shit 
+         
         }
+        delayMicroseconds(100);
     }
 
 
