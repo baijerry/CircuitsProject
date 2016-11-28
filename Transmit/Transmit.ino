@@ -56,7 +56,7 @@ void loop() {
                 char buf[50];
                 url.toCharArray(buf, 50); 
                 
-                for (int i = 0; i < 60; i++){ //sends url 10 times, once a second
+                for (int i = 0; i < 120; i++){ //sends url 10 times, once a second
                     serial_URL.write(buf); 
                     delay(1000);
                 }
