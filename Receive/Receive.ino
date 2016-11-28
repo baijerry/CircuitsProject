@@ -19,7 +19,8 @@ bool Ch1FinishedFlag = true;
 bool Ch2FinishedFlag = true;
 
 //trigger analog reading
-int trigV = 900; 
+int trigV = 500;
+
 //trigger time length since last trigger reading
 int trigTime = 500; //ms
 
@@ -68,7 +69,7 @@ void loop() {
        unsigned int analog1 = analogRead(pin_channel1);
        unsigned int analog2 = analogRead(pin_channel2);
 
-        if (analog1 > trigV && analog2 > trigV){ //find when signal starts sending
+        if (analog1 < trigV && analog2 > trigV){ //find when signal starts sending
           Serial.println("Receiving Signals");
           readflag = true;
           unsigned int read1 = 0;
@@ -84,7 +85,7 @@ void loop() {
            // Serial.print(analog2);
            // Serial.println();
 
-            if (read1 > trigV){
+            if (read1 < trigV){
               Ch1LastTrig = millis();
               //Serial.println("ch1 trig");
             }
