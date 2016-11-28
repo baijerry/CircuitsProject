@@ -105,7 +105,7 @@ void sendWaveA(int freq) {
     Serial.print(freq);
     Serial.println(" Hz");
     
-    tone(pin_waveAB, freq, 2000); //todo make it into pattern A
+    tone(pin_waveAB, freq, 5000); //todo make it into pattern A
 }
 
 void sendWaveB(int freq){
