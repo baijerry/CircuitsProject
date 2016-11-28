@@ -122,14 +122,14 @@ void loop() {
           }
           
           //process shit 
-          if (Ch2FinishTime > Ch1FinishTime) {
-            //Ch1 finished first
+          if (Ch2FinishTime < Ch1FinishTime) {
+            
             Serial.println("Channel_1/Master: B");
             Serial.println("Channel_2/Slave: A");
             Serial.println();
           }
-          else if (Ch2FinishTime < Ch1FinishTime) {
-            //Ch2 finished first
+          else if (Ch2FinishTime > Ch1FinishTime) {
+            
             Serial.println("Channel_1/Master: A");
             Serial.println("Channel_2/Slave: B");
             Serial.println();
