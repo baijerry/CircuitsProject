@@ -62,42 +62,15 @@ void loop() {
        analog1 = analogRead(1);
        analog2 = analogRead(2);
 
-        if (analog1 > trig && analog2 > trigV){ //find when signal starts sending
-          readflag = true;
-          unsigned int read1 = 0;
-          unsigned int read2 = 0;
-          while (readflag) {
-            read1 = analogRead(1);
-            read2 = analogRead(2);
-
-            Serial.print(analog1);
-            Serial.print("\t");
-            Serial.print(analog2);
-            Serial.println();
-
-            if (read1 > trigV)
-              Ch1LastTrig = millis();
-
-            if (read2 > trigV)
-              Ch2LastTrig = millis();
-
-            if (millis() - Ch1LastTrig > ) {
-              
-            }
-
-            if (millis() - Ch2LastTrig > ) {
-            
-            
-            }
-            
-            //something something 
-            readflag = false;
-          }
-
-          //process shit 
-         
+        if (1){ //find when signal starts sending
+          Serial.print(micros());
+          Serial.print("\t\t");
+          Serial.print(analog1);
+          Serial.print("\t");
+          Serial.print(analog2);
+          Serial.println();
+          delayMicroseconds(100);
         }
-
     }
 
 
