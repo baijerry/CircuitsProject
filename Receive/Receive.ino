@@ -30,7 +30,7 @@ void setup() {
     serial_URL.begin(9600); //for URL transmission
     
     Serial.println("Mode: URL");
-    mode = CHANNEL; //default
+    mode = URL; //default
 }
 
 void loop() {
